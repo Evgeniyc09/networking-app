@@ -1,0 +1,101 @@
+// USER VARIABLES SECTION
+
+$accent: rgba(225, 83, 105, 1) // Accent Color
+$fontsize: 16px // Body Font Size
+$userfont: SFProDisplay, sans-serif // User Font Family
+$systemfont: -apple-system, BlinkMacSystemFont, Arial, sans-serif // System Font Family
+
+// Bootstrap compatible gutter variable => $gutter
+// $grid-gutter-width: 30px
+// $gutter: $grid-gutter-width
+
+// IMPORT SECTION
+
+// @import 'node_modules/bootstrap/scss/bootstrap-reboot.scss' // Bootstrap Reboot collection
+// @import 'node_modules/bootstrap/scss/mixins/_breakpoints.scss' // Bootstrap Breakpoints mixin
+// @import 'node_modules/bootstrap/scss/bootstrap-grid.scss' // Optional Bootstrap Grid
+// @import 'node_modules/bootstrap/scss/_utilities.scss' // Optional Bootstrap Utilites
+
+// FONTS LOAD SECTION
+
+@mixin font($fname, $fwoff2, $fwoff, $fttf, $feot) 
+	@font-face
+		font-family: $fname
+		font-display: swap
+		src: url($fttf) format('truetype')
+		src: url($feot) format('embedded-opentype')
+		src: url($fwoff2) format('woff2')
+		src: url($fwoff) format('woff')
+		
+@include font('SFProDisplayLight', '../fonts/SFProDisplay-Light.woff2', '../fonts/SFProDisplay-Light.woff', '../fonts/SFProDisplay-Light.ttf', '../fonts/SFProDisplay-Light.eot')
+@include font('SFProDisplayRegular', '../fonts/SFProDisplay-Regular.woff2', '../fonts/SFProDisplay-Regular.woff', '../fonts/SFProDisplay-Regular.ttf', '../fonts/SFProDisplay-Regular.eot')
+@include font('SFProDisplaySemibold', '../fonts/SFProDisplay-Semibold.woff2', '../fonts/SFProDisplay-Semibold.woff', '../fonts/SFProDisplay-Semibold.ttf', '../fonts/SFProDisplay-Semibold.eot')
+@include font('DrukCyrMedium', '../fonts/DrukCyr-MediumItalic.woff2', '../fonts/DrukCyr-MediumItalic.woff', '../fonts/DrukCyr-MediumItalic.ttf', '../fonts/DrukCyr-MediumItalic.eot')
+@include font('DrukCyrBold', '../fonts/DrukCyr-BoldItalic.woff2', '../fonts/DrukCyr-BoldItalic.woff', '../fonts/DrukCyr-BoldItalic.ttf', '../fonts/DrukCyr-BoldItalic.eot')
+@include font('AeroportMedium', '../fonts/AeroportMedium.woff2', '../fonts/AeroportMedium.woff', '../fonts/AeroportMedium.ttf', '../fonts/AeroportMedium.eot')
+@include font('AeroportBold', '../fonts/AeroportBold.woff2', '../fonts/AeroportBold.woff', '../fonts/AeroportBold.ttf', '../fonts/AeroportBold.eot')
+@include font('BebasNeueBold', '../fonts/BebasNeueBold.woff2', '../fonts/BebasNeueBold.woff', '../fonts/BebasNeueBold.ttf', '../fonts/BebasNeueBold.eot')
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap')
+
+// GENERAL CSS SETTINGS
+body
+	font-family: $userfont
+	font-size: $fontsize
+	color: $accent
+	min-width: 320px
+	position: relative
+	overflow-x: hidden
+	padding: 0
+	margin: 0
+
+.page
+	max-width: 500px
+	margin: 0 auto
+	padding: 0 14px
+	overflow: hidden
+
+*
+	box-sizing: border-box
+
+.title-block
+	position: relative
+	h3
+		font-family: 'DrukCyrBold', sans-serif
+		font-size: 55px
+		color: $accent
+		text-transform: uppercase
+		line-height: 53px
+		margin: 0
+		font-weight: unset
+
+	&.center
+		text-align: center
+	
+	&.right
+		display: flex
+		justify-content: flex-end
+		padding-right: 20px
+	&.left
+		padding-left: 20px
+
+.accent-section
+	.title-block
+		h3
+			color: white
+.base-btn
+	display: inline-block
+	background: $accent
+	font-family: 'SFProDisplaySemibold', sans-serif
+	color: white
+	padding: 7px 11px
+	text-align: center
+	text-decoration: none
+	border-radius: 12px
+	transition: all .2s
+	&:hover
+		box-shadow: 0 4px 4px 0 rgba($accent, .4)
+
+.accent-section
+	.base-btn
+		color: $accent
+		background: white
