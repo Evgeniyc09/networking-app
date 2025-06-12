@@ -427,3 +427,120 @@
 .font-merriweather {
   font-family: "Merriweather", serif !important;
 }
+
+.form {
+  &__wrapper {
+    margin: 40px 0;
+    padding: 20px 15px;
+    border-radius: 6px;
+    background-color: white;
+    box-shadow: 0 4px 24.2px rgba(87, 84, 84, 0.25);
+  }
+
+  &__title {
+    font-size: 22px;
+    line-height: 25px;
+    margin: 0 0 8px;
+    text-align: center;
+  }
+
+  &__description {
+    font-size: 16px;
+    line-height: 19px;
+    margin: 0 0 12px;
+    text-align: center;
+  }
+
+  &__row {
+    margin: 0 0 12px;
+  }
+
+  &__input {
+    display: block;
+    width: 100%;
+    height: 45px;
+    text-indent: 15px;
+    border: 1px solid #bbbbbb;
+    border-radius: 8px;
+    outline: none;
+    margin: 4px 0 0;
+  }
+
+  &__select {
+    display: block;
+    width: 100%;
+    height: 45px;
+    text-indent: 15px;
+    border: 1px solid #bbbbbb;
+    border-radius: 8px;
+    outline: none;
+    margin: 4px 0 0;
+  }
+
+  &__area {
+    display: block;
+    width: 100%;
+    border: 1px solid #bbbbbb;
+    border-radius: 8px;
+    outline: none;
+    padding: 10px;
+    margin: 4px 0 0;
+    resize: none;
+  }
+
+  &__btn-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__send {
+    display: inline-block;
+    width: 146px;
+    min-height: 38px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 15px;
+    color: white;
+    text-decoration: none;
+    margin: 16px 5px 0;
+    padding: 12px;
+    outline: none;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 24.2px rgba(87, 84, 84, 0.25);
+    background: linear-gradient(
+      90deg,
+      #28bac4 -16.19%,
+      #47e8f2 51.79%,
+      #5ec1c7 119.05%
+    );
+    border-radius: 10px;
+    transition: all 0.5s ease;
+    &:hover {
+      background: linear-gradient(
+        90deg,
+        #47e8f2 -16.19%,
+        #47e8f2 51.79%,
+        #47e8f2 119.05%
+      );
+    }
+  }
+
+  &__cancel {
+    display: inline-block;
+    width: 146px;
+    min-height: 38px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 15px;
+    color: #47e8f2;
+    text-decoration: none;
+    margin: 16px 5px 0;
+    padding: 12px;
+    outline: none;
+    cursor: pointer;
+    border: 1px solid #47e8f2;
+    border-radius: 10px;
+    transition: all 0.5s ease;
+  }
+}
