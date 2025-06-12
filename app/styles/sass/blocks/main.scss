@@ -223,7 +223,8 @@
   }
 
   &__content {
-    padding: 12px;
+    position: relative;
+    padding: 12px 12px 65px;
   }
 
   &__label {
@@ -265,8 +266,12 @@
   }
 
   &__link {
+    position: absolute;
+    width: calc(100% - 24px);
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
     display: block;
-    width: 100%;
     min-height: 38px;
     text-align: center;
     font-size: 12px;
@@ -543,5 +548,20 @@
     border: 1px solid #47e8f2;
     border-radius: 10px;
     transition: all 0.5s ease;
+  }
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  margin: 0 0 4px;
+
+  input {
+    margin: 0 8px 0 0;
+  }
+
+  label {
+    font-size: 16px;
+    line-height: 19px;
   }
 }
