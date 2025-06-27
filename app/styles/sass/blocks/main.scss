@@ -637,17 +637,24 @@
     justify-content: space-between;
   }
   &__day-item {
-    width: 26px;
-    height: 26px;
+    position: relative;
+    height: 48px;
+    width: 47px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #eceef2;
     font-size: 12px;
-    border-radius: 100%;
     color: #373737;
     text-decoration: none;
-    margin: 10px 0;
+    margin: 1px 0;
+
+    img {
+      position: absolute;
+      top: 1px;
+      right: 1px;
+      width: 16px;
+    }
 
     &.active {
       color: white;
