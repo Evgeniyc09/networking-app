@@ -1,6 +1,8 @@
 {
   "period": 9,
   "year": 2025,
+  "sector_1": "se3",
+  "sector_2": "nw3",
   "stars": {
     "s1": {
       "s": [9, 2, 4],

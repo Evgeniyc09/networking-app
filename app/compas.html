@@ -23,10 +23,14 @@
         <text id="cursor-angle-label" x="180" y="20" text-anchor="middle" fill="white" font-size="20"
           font-family="sans-serif" alignment-baseline="middle" font-weight="bold">0°</text>
       </g>
+
+
     </svg>
   </div>
   <div class="compass-back">
+
     <div class="compass-back__items">
+      <div class="compass-sectors-wrapper"></div>
       <div id="n" class="compass-back__item compass-back__item--1">
         <div class="fly-star">
           <span></span>
@@ -141,9 +145,19 @@
         <label for="CSYear">Текущий год:</label> <input id="CSYear" class="compass-field" type="number" step="1"
           value="2023">
       </div>
-      <div class="compass-field-wrapper">
+      <!-- <div class="compass-field-wrapper">
         <label for="rangePicker">Текущий месяц:</label> <input type="text" id="rangePicker" class="compass-field"
           placeholder="Дата" readonly>
+      </div> -->
+      <div class="compass-field-wrapper">
+        <label for="CSMonth">Текущий месяц:</label>
+
+        <select name="" id="CSMonth" class="compass-field">
+          <option value="">12/08</option>
+          <option value="">12/08</option>
+          <option value="">12/08</option>
+          <option value="">12/08</option>
+        </select>
       </div>
       <div class="compass-field-wrapper">
         <label for="builtYear">Год постройки:</label> <input id="builtYear" class="compass-field" type="number" step="1"
@@ -169,6 +183,15 @@
         <div class="checkbox-wrapper">
           <input type="checkbox" class="CheckBox" id="FStarsC" name="FStarsC">
           <label for="FStarsC">Центральные летящие звезды</label>
+        </div>
+        <div class="checkbox-wrapper">
+          <input type="checkbox" class="CheckBox" id="fiveYM" name="fiveYM">
+          <label for="fiveYM">Направления 5 года и месяца</label>
+        </div>
+
+        <div class="checkbox-wrapper">
+          <input type="checkbox" class="CheckBox" id="TaiSui" name="TaiSui">
+          <label for="TaiSui">Тай Суй и Суй По</label>
         </div>
 
       </div>
@@ -202,6 +225,8 @@
         .then(data => {
           starsData = data;
           setCursorAngle(cursorAngle);
+          updateFiveYMHighlight();
+          updateTaiSuiHighlight();
         })
         .catch(err => {
           console.error('Ошибка получения данных:', err);
@@ -244,6 +269,7 @@
         if (!flyStar) return;
 
         flyStar.innerHTML = '';
+
         star.values.forEach(val => {
           const span = document.createElement('span');
           span.textContent = val;
@@ -253,14 +279,26 @@
         const yearDiv = document.createElement('div');
         yearDiv.className = 'flyingStartsYear';
         yearDiv.textContent = star.year;
+        if (star.year === 5) yearDiv.classList.add('bg-red');
         flyStar.appendChild(yearDiv);
 
         const monthDiv = document.createElement('div');
         monthDiv.className = 'flyingStartsMonth';
         monthDiv.textContent = star.month;
+        if (star.month === 5) monthDiv.classList.add('bg-red');
         flyStar.appendChild(monthDiv);
+
+        if (
+          fiveYMActive &&
+          (star.year === 5 || star.month === 5)
+        ) {
+          item.classList.add('five-ym-sector');
+        } else {
+          item.classList.remove('five-ym-sector');
+        }
       });
     }
+
 
     ymaps.ready(function () {
       function setupMap(coords, balloonContent) {
@@ -289,6 +327,7 @@
     });
 
     const compassItems = document.querySelector('.compass-back__items');
+    const compassSectors = document.querySelector('.compass-sectors-wrapper');
     const compassGroup = document.getElementById('compass-group');
     const compassAngleInput = document.getElementById('compass-angle');
     compassAngleInput.addEventListener('input', () => {
@@ -406,13 +445,110 @@
     document.getElementById('FStarsC').addEventListener('change', updateFlyingStarsVisibility);
 
     updateFlyingStarsVisibility();
+
+    let taiSuiActive = false;
+
+    document.getElementById('TaiSui').addEventListener('change', function () {
+      taiSuiActive = this.checked;
+      updateTaiSuiHighlight();
+    });
+
+    function updateTaiSuiHighlight() {
+      document.querySelectorAll('.compass-sector').forEach(sector => {
+        sector.classList.remove('tai-sui-sector-highlight');
+      });
+
+      if (!taiSuiActive || !starsData) return;
+
+      const s1 = starsData.sector_1;
+      const s2 = starsData.sector_2;
+      [s1, s2].forEach(name => {
+        if (!name) return;
+        document.querySelector(`.compass-sector.${name}`)?.classList.add('tai-sui-sector-highlight');
+      });
+    }
+
+    let fiveYMActive = false;
+    document.getElementById('fiveYM').addEventListener('change', function () {
+      fiveYMActive = this.checked;
+      setCursorAngle(cursorAngle);
+      updateFiveYMHighlight();
+    });
+
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("width", 360);
+    svg.setAttribute("height", 360);
+    svg.setAttribute("viewBox", "0 0 360 360");
+    svg.setAttribute("class", "compass-sectors");
+    svg.style.position = "absolute";
+    svg.style.top = "0";
+    svg.style.left = "0";
+    svg.style.pointerEvents = "none";
+    svg.style.zIndex = 10;
+
+    const sectorNames = [
+      'n1', 'n2', 'n3',         // Север
+      'ne1', 'ne2', 'ne3',     // Северо-восток
+      'e1', 'e2', 'e3',        // Восток
+      'se1', 'se2', 'se3',     // Юго-восток
+      's1', 's2', 's3',        // Юг
+      'sw1', 'sw2', 'sw3',     // Юго-запад
+      'w1', 'w2', 'w3',        // Запад
+      'nw1', 'nw2', 'nw3'      // Северо-запад
+    ];
+
+    for (let i = 0; i < 24; i++) {
+      const angle1 = (i * 15 - 90 - 24) * Math.PI / 180;
+      const angle2 = ((i + 1) * 15 - 90 - 24) * Math.PI / 180;
+      const r = 180, cx = 180, cy = 180;
+      const x1 = cx + r * Math.cos(angle1);
+      const y1 = cy + r * Math.sin(angle1);
+      const x2 = cx + r * Math.cos(angle2);
+      const y2 = cy + r * Math.sin(angle2);
+
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d",
+        `M${cx},${cy} L${x1},${y1} A${r},${r} 0 0,1 ${x2},${y2} Z`
+      );
+      path.setAttribute("fill", "red");
+      path.setAttribute("fill-opacity", "0");
+      path.setAttribute("class", "compass-sector " + sectorNames[i]);
+      path.setAttribute("data-sector", sectorNames[i]);
+      svg.appendChild(path);
+    }
+
+    document.querySelector('.compass-sectors-wrapper').appendChild(svg);
+
+
+    function updateFiveYMHighlight() {
+      document.querySelectorAll('.compass-sector').forEach(sector => {
+        sector.classList.remove('five-ym-highlight');
+      });
+
+      if (!fiveYMActive || !starsData) return;
+
+      const allDirs = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
+      const found = new Set();
+
+      for (const dir of allDirs) {
+        if (starsData.year_stars[dir] === 5 || starsData.month_stars[dir] === 5) {
+          found.add(dir);
+        }
+      }
+
+      found.forEach(dir => {
+        for (let i = 1; i <= 3; i++) {
+          const sectorName = `${dir}${i}`;
+          document.querySelector(`.compass-sector.${sectorName}`)?.classList.add('five-ym-highlight');
+        }
+      });
+    }
   });
-
 </script>
-
+<!-- 
 <script>
   flatpickr("#rangePicker", {
     locale: "ru",
     dateFormat: "d.m"
   });
-</script>
+</script> -->

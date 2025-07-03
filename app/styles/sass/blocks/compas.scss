@@ -80,6 +80,11 @@
     height: 20px;
     border-radius: 100%;
     font-size: 12px;
+
+    &.bg-red {
+      background-color: #e00000;
+      color: white;
+    }
   }
 
   .flyingStartsMonth {
@@ -175,4 +180,26 @@
     min-width: 150px;
     display: inline-block;
   }
+}
+
+.compass-sector.five-ym-highlight {
+  fill: red !important;
+  fill-opacity: 0.18 !important;
+  /* Можно добавить transition для плавности: */
+  transition: fill-opacity 0.2s;
+}
+
+.compass-sector.tai-sui-sector-highlight {
+  fill: orange !important;
+  fill-opacity: 0.35 !important;
+  transition: fill-opacity 0.2s;
+}
+
+.compass-sectors-wrapper {
+  height: 360px;
+  position: relative;
+  -webkit-transform-origin: center center;
+  -ms-transform-origin: center center;
+  transform-origin: center center;
+  width: 360px;
 }
