@@ -4,7 +4,10 @@
   <!--#include virtual="./parts/head.html" -->
 
   <div id="map"></div>
+  <div class="rotatable" id="rotatable">
 
+    <img src="../images/dist/plan-example.png" alt="">
+  </div>
   <div id="compass-wrap">
     <svg id="compass-svg" width="360" height="360" viewBox="0 0 360 360">
       <!-- Картинка компаса -->
@@ -195,6 +198,11 @@
         </div>
 
       </div>
+
+      <label class="file-label">
+        <input type="file" class="file-input">
+        <span class="file-custom">Загрузить план</span>
+      </label>
       <button class="modal__save-btn" data-modal-close>Сохранить</button>
       <button class="modal__close" data-modal-close></button>
     </div>
@@ -543,6 +551,77 @@
         }
       });
     }
+
+
+
+
+    // ПЛАН ПОМОЩЕНИЯ
+
+    const el = document.getElementById('rotatable');
+    let isDragging = false;
+    let lastAngle = 0;
+    let currentAngle = 0;
+    let center = {};
+
+    function getCenter(elem) {
+      const rect = elem.getBoundingClientRect();
+      return {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+      };
+    }
+
+    function getAngle(x, y, center) {
+      return Math.atan2(y - center.y, x - center.x) * 180 / Math.PI;
+    }
+
+    // Start (mouse/touch)
+    function start(e) {
+      isDragging = true;
+      center = getCenter(el);
+      let x, y;
+      if (e.type.startsWith('touch')) {
+        x = e.touches[0].clientX;
+        y = e.touches[0].clientY;
+      } else {
+        x = e.clientX;
+        y = e.clientY;
+      }
+      lastAngle = getAngle(x, y, center) - currentAngle;
+      document.body.style.userSelect = "none";
+    }
+
+    // Move
+    function move(e) {
+      if (!isDragging) return;
+      let x, y;
+      if (e.type.startsWith('touch')) {
+        x = e.touches[0].clientX;
+        y = e.touches[0].clientY;
+      } else {
+        x = e.clientX;
+        y = e.clientY;
+      }
+      const angle = getAngle(x, y, center);
+      currentAngle = angle - lastAngle;
+      el.style.transform = `rotate(${currentAngle}deg)`;
+    }
+
+    // End
+    function end() {
+      isDragging = false;
+      document.body.style.userSelect = "";
+    }
+
+    // Events
+    el.addEventListener('mousedown', start);
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+
+    el.addEventListener('touchstart', start);
+    window.addEventListener('touchmove', move);
+    window.addEventListener('touchend', end);
+
   });
 </script>
 <!-- 
