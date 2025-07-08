@@ -45,6 +45,12 @@
 </header>
 
   <div id="map"></div>
+  <div class="plan-back">
+    <img src="../images/dist/plan-back.svg" alt="">
+  </div>
+  <div class="plan-front">
+    <img src="../images/dist/plan-front.svg" alt="">
+  </div>
   <div class="rotatable" id="rotatable">
 
     <img src="../images/dist/plan-example.png" alt="">
@@ -58,9 +64,9 @@
       </g>
       <!-- Красный курсор (стрелка) -->
       <g id="cursor-group">
-        <line x1="180" y1="180" x2="180" y2="0" stroke="red" stroke-width="3" stroke-linecap="round" />
+        <line x1="180" y1="180" x2="180" y2="0" stroke="red" stroke-width="2" stroke-linecap="round" />
         <!-- Горизонтальная перекладина в центре -->
-        <line x1="140" y1="180" x2="220" y2="180" stroke="red" stroke-width="3" stroke-linecap="round" />
+        <line x1="140" y1="180" x2="220" y2="180" stroke="red" stroke-width="2" stroke-linecap="round" />
         <!-- Прямоугольник (голова с градусом) -->
         <rect id="cursor-head" x="155" y="0" width="50" height="32" rx="6" fill="red" />
         <!-- Текст угла -->
@@ -71,7 +77,7 @@
 
     </svg>
   </div>
-  <div class="compass-back">
+  <div class="compass-back with-plan">
 
     <div class="compass-back__items">
       <div class="compass-sectors-wrapper"></div>
