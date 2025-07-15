@@ -45,15 +45,15 @@
 </header>
 
   <div id="map"></div>
-  <div class="plan-back">
+  <div class="plan-back" style="display: none;">
     <img src="../images/dist/plan-back.svg" alt="">
   </div>
-  <div class="plan-front">
+  <div class="plan-front" style="display: none;">
     <img src="../images/dist/plan-front.svg" alt="">
   </div>
   <div class="rotatable" id="rotatable">
 
-    <img src="../images/dist/plan-example.png" alt="">
+    <!-- <img src="../images/dist/plan-example.png" alt=""> -->
   </div>
   <div id="compass-wrap">
     <svg id="compass-svg" width="360" height="360" viewBox="0 0 360 360">
@@ -77,7 +77,7 @@
 
     </svg>
   </div>
-  <div class="compass-back with-plan">
+  <div class="compass-back">
 
     <div class="compass-back__items">
       <div class="compass-sectors-wrapper"></div>
@@ -213,6 +213,14 @@
         <label for="builtYear">Год постройки:</label> <input id="builtYear" class="compass-field" type="number" step="1"
           value="2023">
       </div>
+      <div class="compass-field-wrapper">
+        <label for="periodInput">Период:</label>
+        <input id="periodInput" class="compass-field" type="number" min="1" max="9" value="9">
+      </div>
+      <div class="checkbox-wrapper">
+        <input type="checkbox" class="CheckBox" id="compas-visible" name="compas-visible" checked>
+        <label for="compas-visible">Шаблон 24 гор</label>
+      </div>
       <div id="DegreeCorret" class="FormBlock">
 
         <div class="checkbox-wrapper">
@@ -247,7 +255,7 @@
       </div>
 
       <label class="file-label">
-        <input type="file" class="file-input">
+        <input type="file" class="file-input" id="file-input">
         <span class="file-custom">Загрузить план</span>
       </label>
       <button class="modal__save-btn" data-modal-close>Сохранить</button>
@@ -357,23 +365,83 @@
     const replacementStarsUrl = './starsMockData.json';
     let map;
     let cursorAngle = 0;
+    let lastCoords = null;
+    let debounceTimeout = null;
     let starsData = null;
+    let change = null;
+    const url_coordinate = "{% url 'get_magnetic_declination' %}";
+
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth() + 1;
+
+    document.getElementById('CSYear').value = currentYear;
+    document.getElementById('builtYear').value = currentYear;
+    document.getElementById('periodInput').value = 9;
+    document.getElementById('CSMonth').value = currentMonth;
+    const ids = ['periodInput', 'CSYear', 'builtYear', 'CSMonth'];
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('change', () => {
+          const coords = { x: 0, y: 0 };
+          const angle = 0;
+          if (id === 'periodInput') {
+            change = 'period';
+          } else if (id === 'builtYear') {
+            change = 'year_built';
+          } else {
+            change = null;
+          }
+          fetchCompassDataOnce(coords, angle);
+        });
+      }
+    });
+
+    const checkbox = document.getElementById('compas-visible');
+    const compass = document.getElementById('compass-group');
+
+    checkbox.addEventListener('change', function () {
+      if (checkbox.checked) {
+        compass.style.display = 'inline';
+      } else {
+        compass.style.display = 'none';
+      }
+    });
+
+    compass.style.display = checkbox.checked ? 'inline' : 'none';
 
     function fetchCompassDataOnce(coords, cursorAngle) {
-      const period = 9;
-      const year = 2025;
-      const month = 2;
+      const period = Number(document.getElementById('periodInput').value) || 9;
+      const year = Number(document.getElementById('CSYear').value) || new Date().getFullYear();
+      const year_built = Number(document.getElementById('builtYear').value) || new Date().getFullYear();
+      const month = document.getElementById('CSMonth').value;
 
-      fetch(`${replacementStarsUrl}?period=${period}&year=${year}&month=${month}`)
+      fetch(`${replacementStarsUrl}?period=${period}&year=${year}&month=${month}&year_built=${year_built}&change=${change}`)
         .then(response => {
           if (!response.ok) throw new Error('Ошибка загрузки звёзд');
           return response.json();
         })
         .then(data => {
+          console.log(data)
+          if (data.period !== undefined) {
+            document.getElementById('periodInput').value = data.period;
+          }
+          if (data.year !== undefined) {
+            document.getElementById('CSYear').value = data.year;
+          }
+          if (data.year_built !== undefined) {
+            document.getElementById('builtYear').value = data.year_built;
+          }
+          if (data.month !== undefined) {
+            document.getElementById('CSMonth').value = data.month;
+          }
           starsData = data;
           setCursorAngle(cursorAngle);
           updateFiveYMHighlight();
           updateTaiSuiHighlight();
+          change = null;
+
         })
         .catch(err => {
           console.error('Ошибка получения данных:', err);
@@ -381,19 +449,56 @@
     }
 
     function getSectorFromAngle(angle) {
+      const input = document.getElementById('compass-angle');
+      if (!input) {
+        console.warn('Элемент #compass-angle не найден');
+        return;
+      }
+
+      const declination = parseFloat(input.value) || 0
+      const angleDec = angle - declination
+      const normalized = (angleDec % 360 + 360) % 360;  // нормализуем угол
+
       const sectors = [
-        's1', 's2', 's3',
-        'sw1', 'sw2', 'sw3',
-        'w1', 'w2', 'w3',
-        'nw1', 'nw2', 'nw3',
-        'n1', 'n2', 'n3',
-        'ne1', 'ne2', 'ne3',
-        'e1', 'e2', 'e3',
-        'se1', 'se2', 'se3'
+        { name: 's1', from: 157.6, to: 172.5 },
+        { name: 's2', from: 172.6, to: 187.5 },
+        { name: 's3', from: 187.6, to: 202.5 },
+        { name: 'sw1', from: 202.6, to: 217.5 },
+        { name: 'sw2', from: 217.6, to: 232.5 },
+        { name: 'sw3', from: 232.6, to: 247.5 },
+        { name: 'w1', from: 247.6, to: 262.5 },
+        { name: 'w2', from: 262.6, to: 277.5 },
+        { name: 'w3', from: 277.6, to: 292.5 },
+        { name: 'nw1', from: 292.6, to: 307.5 },
+        { name: 'nw2', from: 307.6, to: 322.5 },
+        { name: 'nw3', from: 322.6, to: 337.5 },
+        { name: 'n1', from: 337.6, to: 352.5 },
+        { name: 'n2', from: 352.6, to: 7.5 },
+        { name: 'n3', from: 7.6, to: 22.5 },
+        { name: 'ne1', from: 22.6, to: 37.5 },
+        { name: 'ne2', from: 37.6, to: 52.5 },
+        { name: 'ne3', from: 52.6, to: 67.5 },
+        { name: 'e1', from: 67.6, to: 82.5 },
+        { name: 'e2', from: 82.6, to: 97.5 },
+        { name: 'e3', from: 97.6, to: 112.5 },
+        { name: 'se1', from: 112.6, to: 127.5 },
+        { name: 'se2', from: 127.6, to: 142.5 },
+        { name: 'se3', from: 142.6, to: 157.5 }
       ];
 
-      const index = Math.floor((angle % 360) / 15);
-      return sectors[index] || 's1';
+      for (const sector of sectors) {
+        if (sector.from < sector.to) {
+          if (normalized >= sector.from && normalized <= sector.to) {
+            return sector.name;
+          }
+        } else {
+          if (normalized >= sector.from || normalized <= sector.to) {
+            return sector.name;
+          }
+        }
+      }
+
+      return 's1';
     }
 
     function transformStarsToCompassArray(starsRaw, years, months, sectorKey) {
@@ -411,6 +516,7 @@
     function fillCompassItems(stars) {
       stars.forEach(star => {
         const item = document.getElementById(`${star.sector}`);
+        ;
         if (!item) return;
         const flyStar = item.querySelector('.fly-star');
         if (!flyStar) return;
@@ -426,13 +532,13 @@
         const yearDiv = document.createElement('div');
         yearDiv.className = 'flyingStartsYear';
         yearDiv.textContent = star.year;
-        if (star.year === 5) yearDiv.classList.add('bg-red');
+        if (star.year == 5 | star.year == "5") yearDiv.classList.add('bg-red');
         flyStar.appendChild(yearDiv);
 
         const monthDiv = document.createElement('div');
         monthDiv.className = 'flyingStartsMonth';
         monthDiv.textContent = star.month;
-        if (star.month === 5) monthDiv.classList.add('bg-red');
+        if (star.month === 5 | star.month == "5") monthDiv.classList.add('bg-red');
         flyStar.appendChild(monthDiv);
 
         if (
@@ -443,24 +549,55 @@
         } else {
           item.classList.remove('five-ym-sector');
         }
+
       });
     }
-
 
     ymaps.ready(function () {
       function setupMap(coords, balloonContent) {
         map = new ymaps.Map("map", { center: coords, zoom: 10 });
         map.geoObjects.add(new ymaps.Placemark(coords, { balloonContent }));
+
         fetchCompassDataOnce(coords, cursorAngle);
+
         map.events.add('boundschange', function () {
         });
       }
 
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          console.log('[geo] ✅ Координаты получены:', position.coords);
+        },
+        function (error) {
+          console.warn('[geo] ❌ Ошибка геолокации:', error.message);
+        }
+      );
+
       if (navigator.geolocation) {
+        console.log('[geo] Геолокация поддерживается');
+        console.log(url_coordinate)
         navigator.geolocation.getCurrentPosition(
           function (position) {
+            console.log('[geo] Координаты получены:', position.coords);
             const userCoords = [position.coords.latitude, position.coords.longitude];
             setupMap(userCoords, "Вы здесь");
+
+            fetch(`${url_coordinate}?lat=${userCoords[0]}&lon=${userCoords[1]}`)
+              .then(res => res.json())
+              .then(data => {
+                console.log('Склонение получено:', data); // <---- Вставка
+                if (data.declination !== undefined) {
+                  const compassInput = document.getElementById('compass-angle');
+                  console.log('Найден input:', compassInput); // <---- Проверка input
+                  compassInput.value = data.declination;
+                  const declination = data.declination;
+                  compassInput.dispatchEvent(new Event('input'));
+                }
+              })
+              .catch(err => {
+                console.error('Ошибка получения склонения:', err);
+              });
+
           },
           function () {
             const defaultCoords = [43.25368, 76.90275];
@@ -475,6 +612,7 @@
 
     const compassItems = document.querySelector('.compass-back__items');
     const compassSectors = document.querySelector('.compass-sectors-wrapper');
+
     const compassGroup = document.getElementById('compass-group');
     const compassAngleInput = document.getElementById('compass-angle');
     compassAngleInput.addEventListener('input', () => {
@@ -506,6 +644,7 @@
         );
       }
     }
+
     setCursorAngle(cursorAngle);
 
     function getAngleFromCenter(clientX, clientY) {
@@ -518,7 +657,8 @@
       angle = (angle + 90 + 360) % 360;
       return angle;
     }
-
+    let clientX = null;
+    let clientY = null;
     cursorHead.addEventListener('mousedown', function (e) {
       e.preventDefault();
       dragging = true;
@@ -528,6 +668,7 @@
     window.addEventListener('mousemove', function (e) {
       if (!dragging) return;
       const angle = getAngleFromCenter(e.clientX, e.clientY);
+      currentAngle = angle
       setCursorAngle(angle);
     });
 
@@ -546,6 +687,7 @@
       if (!dragging) return;
       const touch = e.touches[0];
       const angle = getAngleFromCenter(touch.clientX, touch.clientY);
+      currentAngle = angle
       setCursorAngle(angle);
     });
 
@@ -591,8 +733,8 @@
     document.getElementById('FStarsM').addEventListener('change', updateFlyingStarsVisibility);
     document.getElementById('FStarsC').addEventListener('change', updateFlyingStarsVisibility);
 
-    updateFlyingStarsVisibility();
 
+    updateFlyingStarsVisibility();
     let taiSuiActive = false;
 
     document.getElementById('TaiSui').addEventListener('change', function () {
@@ -620,6 +762,7 @@
       fiveYMActive = this.checked;
       setCursorAngle(cursorAngle);
       updateFiveYMHighlight();
+      updateFlyingStarsVisibility();
     });
 
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -689,10 +832,8 @@
           document.querySelector(`.compass-sector.${sectorName}`)?.classList.add('five-ym-highlight');
         }
       });
+      updateFlyingStarsVisibility();
     }
-
-
-
 
     // ПЛАН ПОМОЩЕНИЯ
 
@@ -701,6 +842,112 @@
     let lastAngle = 0;
     let currentAngle = 0;
     let center = {};
+
+    document.getElementById('file-input').addEventListener('change', function (event) {
+      const file = event.target.files[0];
+
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          const rotatableDiv = document.getElementById('rotatable');
+          rotatableDiv.innerHTML = '';
+
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.alt = 'Загруженное изображение';
+
+          rotatableDiv.appendChild(img);
+
+          // Скрыть компас
+          const cursorGroup = document.getElementById('cursor-group');
+          if (cursorGroup) cursorGroup.style.display = 'none';
+
+          // Показать план
+          const planBack = document.querySelector('.plan-back');
+          const planFront = document.querySelector('.plan-front');
+          if (planBack) planBack.style.display = 'block';
+          if (planFront) planFront.style.display = 'block';
+
+          // Добавить класс with-plan
+          const compassBack = document.querySelector('.compass-back');
+          if (compassBack) compassBack.classList.add('with-plan');
+          const compassGroupPlan = document.getElementById('compass-group');
+          const compassItemsPlan = document.querySelector('.compass-back__items');
+          const input = document.getElementById('compass-angle');
+          const inputValue = Number(input.value) || 0;
+          angle = (180 - (currentAngle - inputValue) + 360) % 360;
+
+          const planItems = compassItemsPlan.querySelectorAll('.compass-back__item');
+
+          const degreeCorret = document.getElementById('DegreeCorret');
+          const oldToggle = degreeCorret.querySelector('#toggle-plan');
+          if (oldToggle && oldToggle.closest('.compass-field-wrapper')) {
+            oldToggle.closest('.compass-field-wrapper').remove();
+          }
+
+          const wrapper = document.createElement('div');
+          wrapper.className = 'compass-field-wrapper';
+
+
+          const label = document.createElement('label');
+          label.setAttribute('for', 'toggle-plan');
+          label.textContent = 'Включить план:';
+
+          const toggleInput = document.createElement('input');
+          toggleInput.type = 'checkbox';
+          toggleInput.className = 'compass-field';
+          toggleInput.id = 'toggle-plan';
+          toggleInput.checked = true;
+
+          wrapper.appendChild(label);
+          wrapper.appendChild(toggleInput);
+
+          degreeCorret.appendChild(wrapper);
+
+          function handlePlanToggle() {
+            const isChecked = toggleInput.checked;
+
+            const cursorGroup = document.getElementById('cursor-group');
+            const planBack = document.querySelector('.plan-back');
+            const planFront = document.querySelector('.plan-front');
+            const compassBack = document.querySelector('.compass-back');
+
+            if (isChecked) {
+              console.log('checked')
+              if (cursorGroup) cursorGroup.style.display = 'none';
+              if (planBack) planBack.style.display = 'block';
+              if (planFront) planFront.style.display = 'block';
+              if (compassBack) compassBack.classList.add('with-plan');
+              if (img) img.style.display = 'block';
+              const rotateTo = 180 - cursorAngle;
+              if (compassGroupPlan) compassGroupPlan.setAttribute('transform', `rotate(${rotateTo},180,180)`);
+              if (compassItemsPlan) compassItemsPlan.style.transform = `rotate(${rotateTo}deg)`;
+              updateCabins(rotateTo)
+            } else {
+              if (cursorGroup) cursorGroup.style.display = 'block';
+              if (planBack) planBack.style.display = 'none';
+              if (planFront) planFront.style.display = 'none';
+              if (compassBack) compassBack.classList.remove('with-plan');
+              if (img) img.style.display = 'none';
+
+              if (compassGroupPlan) compassGroupPlan.setAttribute('transform', `rotate(0,180,180)`);
+              if (compassItemsPlan) compassItemsPlan.style.transform = `rotate(0deg)`;
+
+              updateCabins(0)
+            }
+          }
+          handlePlanToggle();
+          toggleInput.addEventListener('change', function () {
+            handlePlanToggle();
+          });
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        alert('Пожалуйста, выберите изображение');
+      }
+    });
 
     function getCenter(elem) {
       const rect = elem.getBoundingClientRect();
@@ -714,7 +961,6 @@
       return Math.atan2(y - center.y, x - center.x) * 180 / Math.PI;
     }
 
-    // Start (mouse/touch)
     function start(e) {
       isDragging = true;
       center = getCenter(el);
@@ -730,7 +976,6 @@
       document.body.style.userSelect = "none";
     }
 
-    // Move
     function move(e) {
       if (!isDragging) return;
       let x, y;
@@ -746,13 +991,13 @@
       el.style.transform = `rotate(${currentAngle}deg)`;
     }
 
-    // End
+
     function end() {
       isDragging = false;
       document.body.style.userSelect = "";
     }
 
-    // Events
+
     el.addEventListener('mousedown', start);
     window.addEventListener('mousemove', move);
     window.addEventListener('mouseup', end);
@@ -760,8 +1005,9 @@
     el.addEventListener('touchstart', start);
     window.addEventListener('touchmove', move);
     window.addEventListener('touchend', end);
-
   });
+
+
 </script>
 <!-- 
 <script>

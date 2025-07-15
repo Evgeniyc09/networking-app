@@ -97,6 +97,11 @@
     height: 20px;
     border-radius: 100%;
     font-size: 12px;
+
+    &.bg-red {
+      background-color: #e00000;
+      color: white;
+    }
   }
 
   span {
@@ -282,52 +287,52 @@
 }
 
 .with-plan {
-  z-index: 10;
+  z-index: 16;
   .compass-back__item--1 {
     position: absolute;
-    top: 20px;
+    top: 18px;
     right: 166px;
   }
 
   .compass-back__item--2 {
     position: absolute;
-    right: 40px;
-    top: 91px;
+    right: 45px;
+    top: 48px;
   }
 
   .compass-back__item--3 {
     position: absolute;
-    right: 40px;
+    right: 25px;
     top: 162px;
   }
 
   .compass-back__item--4 {
     position: absolute;
-    right: 40px;
-    top: 219px;
+    right: 38px;
+    top: 267px;
   }
 
   .compass-back__item--5 {
     position: absolute;
-    right: 167px;
-    top: 300px;
+    right: 160px;
+    top: 317px;
   }
 
   .compass-back__item--6 {
     position: absolute;
-    right: 291px;
-    top: 220px;
+    right: 281px;
+    top: 268px;
   }
 
   .compass-back__item--7 {
     position: absolute;
-    right: 291px;
-    top: 157px;
+    right: 301px;
+    right: 301px;
   }
 
   .compass-back__item--8 {
     position: absolute;
-    right: 291px;
-    top: 91px;
+    right: 271px;
+    top: 50px;
   }
 }
