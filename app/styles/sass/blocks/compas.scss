@@ -241,23 +241,27 @@
 
 #rotatable {
   position: absolute;
-  width: 160px;
-  height: 160px;
+  width: 220px;
+  height: 220px;
   left: 0;
   right: 0;
   margin: 0 auto;
-  top: 410px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-items: center;
+  top: 384px;
+
   cursor: grab;
   touch-action: none;
   user-select: none;
   -webkit-user-drag: none;
   -webkit-user-select: none;
   z-index: 15;
-
+  .rotatable-img {
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
+  }
   img {
     max-width: 100%;
     height: 100%;
@@ -268,7 +272,7 @@
 
 .plan-back {
   position: absolute;
-  top: 371px;
+  top: 359px;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -278,7 +282,7 @@
 
 .plan-front {
   position: absolute;
-  top: 580px;
+  top: 600px;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -349,4 +353,23 @@
     right: 271px;
     top: 50px;
   }
+}
+
+.plan-grid {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  width: 220px;
+  height: 220px;
+  z-index: 3;
+}
+
+.plan-grid-item {
+  width: 33.33%;
+  height: 33.33%;
+  border: 1px solid #333;
+  padding: 10px;
+  color: black;
+  font-size: 16px;
+  text-align: center;
 }

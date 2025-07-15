@@ -11,8 +11,20 @@
     <img src="../images/dist/plan-front.svg" alt="">
   </div>
   <div class="rotatable" id="rotatable">
-
-    <!-- <img src="../images/dist/plan-example.png" alt=""> -->
+    <div class="plan-grid" style="display: none;">
+      <div class="plan-grid-item">З</div>
+      <div class="plan-grid-item">СЗ</div>
+      <div class="plan-grid-item">С</div>
+      <div class="plan-grid-item">ЮЗ</div>
+      <div class="plan-grid-item"></div>
+      <div class="plan-grid-item">СВ</div>
+      <div class="plan-grid-item">Ю</div>
+      <div class="plan-grid-item">ЮВ</div>
+      <div class="plan-grid-item">В</div>
+    </div>
+    <div class="rotatable-img">
+      <!-- <img src="../images/dist/plan-example.png" alt=""> -->
+    </div>
   </div>
   <div id="compass-wrap">
     <svg id="compass-svg" width="360" height="360" viewBox="0 0 360 360">
@@ -206,9 +218,16 @@
           <label for="fiveYM">Направления 5 года и месяца</label>
         </div>
 
+
+
         <div class="checkbox-wrapper">
           <input type="checkbox" class="CheckBox" id="TaiSui" name="TaiSui">
           <label for="TaiSui">Тай Суй и Суй По</label>
+        </div>
+
+        <div class="checkbox-wrapper plan-grid-wrapper" style="display: none;">
+          <input type="checkbox" class="CheckBox" id="planGrid" name="planGrid">
+          <label for="planGrid">Включить сетку</label>
         </div>
 
       </div>
@@ -238,6 +257,9 @@
     let change = null;
     const url_coordinate = "{% url 'get_magnetic_declination' %}";
 
+    const planGridCheckbox = document.getElementById('planGrid');
+    let planGridRotationBlocked = false;
+
     const now = new Date();
     const currentYear = now.getFullYear();
     const currentMonth = now.getMonth() + 1;
@@ -246,6 +268,9 @@
     document.getElementById('builtYear').value = currentYear;
     document.getElementById('periodInput').value = 9;
     document.getElementById('CSMonth').value = currentMonth;
+
+
+
     const ids = ['periodInput', 'CSYear', 'builtYear', 'CSMonth'];
     ids.forEach(id => {
       const el = document.getElementById(id);
@@ -723,13 +748,14 @@
 
         reader.onload = function (e) {
           const rotatableDiv = document.getElementById('rotatable');
-          rotatableDiv.innerHTML = '';
+          const rotatableImg = document.querySelector('.rotatable-img');
+          rotatableImg.innerHTML = '';
 
           const img = document.createElement('img');
           img.src = e.target.result;
           img.alt = 'Загруженное изображение';
 
-          rotatableDiv.appendChild(img);
+          rotatableImg.appendChild(img);
 
           // Скрыть компас
           const cursorGroup = document.getElementById('cursor-group');
@@ -772,10 +798,31 @@
           toggleInput.id = 'toggle-plan';
           toggleInput.checked = true;
 
+          const labelGrid = document.createElement('label');
+          labelGrid.setAttribute('for', 'planGrid');
+          labelGrid.textContent = 'Включить Сетку:';
+
           wrapper.appendChild(label);
           wrapper.appendChild(toggleInput);
 
+          document.querySelector('.plan-grid-wrapper').style.display = 'block'
+
           degreeCorret.appendChild(wrapper);
+
+          function setPlanGridState() {
+            const checked = planGridCheckbox.checked;
+            document.querySelector('.plan-grid').style.display = checked ? 'flex' : 'none';
+            compass.style.display = checked ? 'none' : '';
+
+            planGridRotationBlocked = checked;
+            if (checked) {
+              rotatable.classList.add('rotation-blocked');
+            } else {
+              rotatable.classList.remove('rotation-blocked');
+            }
+          }
+
+          planGridCheckbox.addEventListener('change', setPlanGridState);
 
           function handlePlanToggle() {
             const isChecked = toggleInput.checked;
@@ -834,6 +881,7 @@
     }
 
     function start(e) {
+      if (planGridRotationBlocked) return;
       isDragging = true;
       center = getCenter(el);
       let x, y;
