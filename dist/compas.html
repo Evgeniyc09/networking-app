@@ -541,6 +541,11 @@
         if (star.month === 5 | star.month == "5") monthDiv.classList.add('bg-red');
         flyStar.appendChild(monthDiv);
 
+        const sectorNameDiv = document.createElement('div');
+        sectorNameDiv.className = 'flyingSectorName';
+        sectorNameDiv.textContent = star.sector;
+        flyStar.appendChild(sectorNameDiv);
+
         if (
           fiveYMActive &&
           (star.year === 5 || star.month === 5)

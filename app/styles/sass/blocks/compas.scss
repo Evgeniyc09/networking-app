@@ -285,9 +285,23 @@
   text-align: center;
   z-index: 20;
 }
-
+.flyingSectorName {
+  display: none;
+  background-color: #fff;
+  border: 1px solid #908070;
+  border-radius: 100%;
+  font-size: 12px;
+  height: 20px;
+  position: absolute;
+  right: 8px;
+  top: -20px;
+  width: 20px;
+}
 .with-plan {
   z-index: 16;
+  .flyingSectorName {
+    display: block;
+  }
   .compass-back__item--1 {
     position: absolute;
     top: 18px;
