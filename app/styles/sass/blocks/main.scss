@@ -650,11 +650,29 @@
     text-decoration: none;
     margin: 1px 0;
 
-    img {
+    &-imgs {
       position: absolute;
-      top: 1px;
-      right: 1px;
-      width: 16px;
+
+      &.top {
+        top: 0px;
+      }
+
+      &.right {
+        right: 2px;
+      }
+
+      &.bottom {
+        bottom: 0px;
+      }
+
+      &.left {
+        left: 2px;
+      }
+
+      img {
+        max-width: 9px;
+        max-height: 9px;
+      }
     }
 
     &.active {
