@@ -285,7 +285,7 @@
           } else {
             change = null;
           }
-          fetchCompassDataOnce(coords, angle);
+          fetchCompassDataOnce(coords, cursorAngle);
         });
       }
     });
@@ -406,6 +406,10 @@
     }
 
     function fillCompassItems(stars) {
+      const yearVisible = document.getElementById('FStarsY')?.checked;
+      const monthVisible = document.getElementById('FStarsM')?.checked;
+      const natalVisible = document.getElementById('FStarsN')?.checked;
+
       stars.forEach(star => {
         const item = document.getElementById(`${star.sector}`);
         ;
@@ -425,18 +429,26 @@
         yearDiv.className = 'flyingStartsYear';
         yearDiv.textContent = star.year;
         if (star.year == 5 | star.year == "5") yearDiv.classList.add('bg-red');
+        yearDiv.style.display = yearVisible ? '' : 'none';
         flyStar.appendChild(yearDiv);
 
         const monthDiv = document.createElement('div');
         monthDiv.className = 'flyingStartsMonth';
         monthDiv.textContent = star.month;
         if (star.month === 5 | star.month == "5") monthDiv.classList.add('bg-red');
+        monthDiv.style.display = monthVisible ? '' : 'none';
         flyStar.appendChild(monthDiv);
 
         const sectorNameDiv = document.createElement('div');
         sectorNameDiv.className = 'flyingSectorName';
         sectorNameDiv.textContent = star.sector;
         flyStar.appendChild(sectorNameDiv);
+
+        if (!natalVisible) {
+          flyStar.classList.add('fly-star--hidden');
+        } else {
+          flyStar.classList.remove('fly-star--hidden');
+        }
 
         if (
           fiveYMActive &&
@@ -540,6 +552,8 @@
             getSectorFromAngle(cursorAngle)
           )
         );
+
+        updateFlyingStarsVisibility();
       }
     }
 
