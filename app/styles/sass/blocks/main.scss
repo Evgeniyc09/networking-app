@@ -877,3 +877,49 @@
 .mySwiper {
   margin: 0 0 20px;
 }
+
+.v-progress {
+  background-color: white;
+  padding: 8px;
+  border-radius: 8px;
+  margin: 24px 0;
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 12px;
+  }
+  &__progress-bar {
+    position: relative;
+    width: 100%;
+    border-radius: 4px;
+    height: 5px;
+    background-color: #e6e7eb;
+    overflow: hidden;
+  }
+
+  &__count {
+    font-size: 14px;
+    line-height: 17px;
+    margin: 0 0 4px;
+  }
+
+  &__percent {
+    font-size: 14px;
+    line-height: 17px;
+    margin: 0 0 4px;
+  }
+
+  &__line {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      #47e8f2 -16.19%,
+      #47e8f2 51.79%,
+      #47e8f2 119.05%
+    );
+  }
+}
