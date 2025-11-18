@@ -1,7 +1,25 @@
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script src="../js/app.min.js"></script>
+<script src="./js/app.min.js"></script>
+
+
+<script>
+    var swiper = new Swiper(".advertSwiper", {
+        pagination: {
+            el: ".swiper-pagination",
+        },
+    });
+
+    var swiper = new Swiper(".selectionSwiper", {
+        direction: "horizontal",
+        slidesPerView: "auto",
+        freeMode: true,
+        scrollbar: {
+            el: ".swiper-scrollbar",
+        },
+        mousewheel: true,
+        spaceBetween: 12,
+    });
+</script>
 </body>
 
 </html>

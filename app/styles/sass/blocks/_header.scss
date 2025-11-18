@@ -1,0 +1,55 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding: 40px 0 20px;
+
+  &__info {
+    display: flex;
+    justify-content: flex-start;
+    gap: 12px;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  &__avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    border: 1px solid var(--cgreen);
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__name {
+    font-family: "ProximaNovaBold", sans-serif;
+    font-size: 14px;
+    line-height: 17px;
+    color: var(--white);
+    margin: 0 0 4px;
+  }
+
+  &__status {
+    display: inline-block;
+    font-family: "ProximaNovaRegular", sans-serif;
+    font-size: 10px;
+    line-height: 17px;
+    color: var(--black);
+    margin: 0;
+    padding: 0 4px;
+    background-color: var(--cgreen);
+    border-radius: 2px;
+  }
+}
+
+.header__title {
+  font-family: "ProximaNovaBold", sans-serif;
+  font-size: 20px;
+  color: white;
+}

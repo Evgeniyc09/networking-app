@@ -1,0 +1,188 @@
+<!--#set var="title" value="OptimizedHTML 5" -->
+<!--#include virtual="./parts/header.html" -->
+<div class="page__bg">
+
+  <div class="page">
+    <header id="header" class="header" style=" margin-top: var(--tg-content-safe-area-inset-top);">
+
+      <div class="header__title">
+        Регистрация
+      </div>
+
+      <div class="header__logo">
+        <img src="./images/dist/logo.svg" alt="">
+      </div>
+    </header>
+
+    <form action="">
+      <!-- <div class="form__avatar"><img src="./images/dist/avatar-empty.png" alt=""></div> -->
+      <div class="status" id="status"></div>
+      <div class="profile-avatar form__avatar">
+        <img src="../images/dist/avatar-empty.png" alt="">
+        <div class="percent" id="percent">0%</div>
+        <input type="file" id="fileInput" accept="image/png,image/jpeg,image/jpg" />
+      </div>
+      <button class="v-btn btn-upload page-head-btn-image-upload">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 9.75V15.75" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path
+            d="M3.00001 11.1743C2.44279 10.605 2.02244 9.9163 1.77079 9.16047C1.51914 8.40464 1.44279 7.60145 1.54753 6.81174C1.65227 6.02203 1.93535 5.26652 2.37533 4.60242C2.81531 3.93832 3.40065 3.38305 4.08701 2.97868C4.77337 2.57431 5.54276 2.33143 6.33689 2.26845C7.13102 2.20547 7.92906 2.32403 8.67059 2.61516C9.41211 2.90629 10.0777 3.36235 10.6168 3.94879C11.156 4.53524 11.5546 5.23669 11.7825 6.00001H13.125C13.8491 5.99993 14.5541 6.23276 15.1358 6.6641C15.7174 7.09543 16.1449 7.70241 16.3551 8.39537C16.5653 9.08833 16.547 9.83051 16.303 10.5123C16.059 11.1941 15.6022 11.7793 15 12.1815"
+            stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M6 12.75L9 9.75L12 12.75" stroke="white" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        Загрузить фотографию профиля
+      </button>
+
+      <div class="form__field-wrapper">
+        <label for="name" class="label">Имя</label>
+        <input id="name" type="text" name="name" class="field">
+      </div>
+
+      <div class="form__field-wrapper">
+        <label for="surname" class="label">Фамилия</label>
+        <input id="surname" type="text" name="surname" class="field">
+      </div>
+
+      <div class="form__field-wrapper">
+        <label for="male" class="label">Город</label>
+
+        <select name="" id="male" class="select">
+          <option value="a">Алматы</option>
+          <option value="b">Астана</option>
+        </select>
+      </div>
+
+      <div class="form__field-wrapper">
+        <label for="about" class="label">О себе</label>
+
+        <textarea rows="4" name="about" id="about" class="textarea auto-textarea"></textarea>
+      </div>
+
+      <div class="form__field-wrapper">
+        <label class="label">Пол</label>
+
+        <label class="custom-radio">
+          <input type="radio" name="gender" value="male">
+          <span>Мужчина</span>
+        </label>
+
+        <label class="custom-radio">
+          <input type="radio" name="gender" value="female">
+          <span>Женщина</span>
+        </label>
+      </div>
+
+      <div class="form__field-wrapper">
+        <label class="label">Навыки</label>
+
+        <label class="custom-checkbox">
+          <input type="checkbox" name="skills" value="js">
+          <span>Навык 1</span>
+        </label>
+
+        <label class="custom-checkbox">
+          <input type="checkbox" name="skills" value="vue">
+          <span>Навык 1</span>
+        </label>
+      </div>
+
+      <div class="form__field-wrapper">
+        <div class="social-input">
+          <span class="social-input__prefix">vk.com/</span>
+          <input type="text" class="social-input__field" placeholder="ваш_профиль">
+        </div>
+      </div>
+
+      <div class="form__field-wrapper">
+
+        <div class="social-input">
+          <span class="social-input__prefix">instagram.com/</span>
+          <input type="text" class="social-input__field" placeholder="ваш_профиль">
+        </div>
+      </div>
+
+      <div class="form__submit">
+        <button type="submit" class="v-btn">Заргестрироваться</button>
+      </div>
+
+    </form>
+    <!--#include virtual="./parts/nav.html" -->
+  </div>
+
+</div>
+
+<!--#include virtual="./parts/footer.html" -->
+
+<script>
+  (function () {
+    const btn = document.querySelector('.page-head-btn-image-upload');
+    const input = document.getElementById('fileInput');
+    const percent = document.getElementById('percent');
+    const avatar = document.querySelector('.profile-avatar img');
+
+    const MAX_SIZE = 5 * 1024 * 1024;
+    const ALLOWED = ['image/jpeg', 'image/png'];
+    let xhr = null;
+
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      input.click();
+    });
+
+    input.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      input.value = '';
+
+      if (!file) return;
+      if (!ALLOWED.includes(file.type)) return;
+      if (file.size > MAX_SIZE) return;
+
+      uploadFile(file);
+    });
+
+    function uploadFile(file) {
+      if (xhr) try { xhr.abort(); } catch (_) { }
+
+      xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://api.imgbb.com/1/upload?key=8f66eccef4fc4672d813e747b661132c', true);
+
+      const form = new FormData();
+      form.append('image', file);
+
+      xhr.onloadstart = () => {
+        percent.style.display = 'flex';
+        percent.textContent = '';
+      };
+
+      xhr.upload.onprogress = (ev) => {
+        if (!ev.lengthComputable) return;
+        const pct = Math.round((ev.loaded / ev.total) * 100);
+
+        percent.textContent = pct + '%';
+      };
+
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState !== 4) return;
+
+        if (xhr.status >= 200 && xhr.status < 300) {
+          const data = JSON.parse(xhr.responseText || '{}');
+          if (data?.data?.display_url) avatar.src = data.data.display_url;
+        }
+
+        finish();
+      };
+
+      xhr.onerror = finish;
+      xhr.onabort = finish;
+
+      xhr.send(form);
+    }
+
+    function finish() {
+      percent.style.display = 'none';
+      percent.textContent = '';
+      xhr = null;
+    }
+  })();
+</script>

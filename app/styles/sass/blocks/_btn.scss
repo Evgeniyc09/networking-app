@@ -1,0 +1,56 @@
+.v-btn {
+  font-family: "ProximaNovaBold", sans-serif;
+  background-color: #1578d7;
+  color: white;
+  border: none;
+  font-size: 16px;
+  border-radius: 8px;
+  min-height: 48px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #1062af;
+  }
+}
+
+.form__submit {
+  margin: 20px 0 0;
+  .v-btn {
+    width: 100%;
+  }
+}
+
+.btn-upload {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  min-height: 38px;
+  padding: 0 20px;
+  margin: 0 auto 30px;
+  gap: 8px;
+}
+
+.s-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.2;
+
+  text-decoration: none;
+  border: none;
+  outline: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+
+  &--primary {
+    color: white;
+    background: #1578d7;
+  }
+  &--default {
+    color: white;
+    background: #3c3e40;
+  }
+}

@@ -1,0 +1,82 @@
+.modal {
+  position: fixed;
+  height: 100dvh;
+  width: 100%;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  display: none;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+.modal__content {
+  position: relative;
+  background-color: var(--gray-dark);
+  border: 1px solid var(--gray-stroke);
+  border-radius: 12px;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.temporary-stub-icon {
+  display: flex;
+  background-color: var(--gray);
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 12px;
+}
+
+.temporary-stub-label {
+  font-size: 16px;
+  color: white;
+  font-family: "ProximaNovaBold", sans-serif;
+  margin: 0 0 4px;
+}
+
+.temporary-stub-desc {
+  font-size: 14px;
+  color: white;
+  margin: 0;
+  opacity: 0.4;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+.modal.active {
+  display: flex;
+}
+
+.scroll-locked {
+  touch-action: none;
+}
+
+.modal__close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 35px;
+  height: 35px;
+  color: white;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal__overlay {
+  position: absolute;
+  inset: 0;
+}

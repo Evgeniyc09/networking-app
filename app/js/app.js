@@ -1,46 +1,109 @@
+document.addEventListener('DOMContentLoaded', () => {
+  let openCount = 0;
+  const body = document.body;
 
-document.addEventListener("DOMContentLoaded", (event) => {
-	document.querySelectorAll('.tab-buttons button').forEach(button => {
-		button.addEventListener('click', () => {
-			const tabNumber = button.getAttribute('data-tab');
+  const getScrollbarWidth = () =>
+    window.innerWidth - document.documentElement.clientWidth;
 
-			// Удалить класс active у всех кнопок и контента
-			document.querySelectorAll('.tab-buttons button').forEach(btn => btn.classList.remove('active'));
-			document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+  function lockScroll() {
+    if (openCount === 0) {
+      const sw = getScrollbarWidth();
+      body.dataset._prevOverflow = body.style.overflow || '';
+      body.dataset._prevPaddingRight = body.style.paddingRight || '';
+      if (sw > 0) body.style.paddingRight = sw + 'px';
+      body.style.overflow = 'hidden';
+      body.classList.add('scroll-locked');
+    }
+    openCount++;
+  }
 
-			// Добавить класс active к выбранной кнопке и соответствующему контенту
-			button.classList.add('active');
-			document.querySelector(`.tab-content[data-content="${tabNumber}"]`).classList.add('active');
-		});
-	});
+  function unlockScroll() {
+    openCount = Math.max(0, openCount - 1);
+    if (openCount === 0) {
+      body.style.overflow = body.dataset._prevOverflow || '';
+      body.style.paddingRight = body.dataset._prevPaddingRight || '';
+      body.classList.remove('scroll-locked');
+      delete body.dataset._prevOverflow;
+      delete body.dataset._prevPaddingRight;
+    }
+  }
 
-	initModal()
+  function openModal(id) {
+    const modal = document.getElementById(id);
+    if (!modal || modal.classList.contains('active')) return;
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+    lockScroll();
+  }
+
+  function closeModal(modal) {
+    if (!modal || !modal.classList.contains('active')) return;
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    unlockScroll();
+  }
+
+  document.addEventListener('click', (e) => {
+    const openBtn = e.target.closest('[data-modal-open]');
+    const closeBtn = e.target.closest('[data-modal-close]');
+
+
+    if (openBtn) {
+      if (openBtn.tagName === 'A') e.preventDefault();
+      const href = openBtn.getAttribute('href');
+      if (href && (href === '#' || href.startsWith('#'))) e.preventDefault();
+      const id = openBtn.getAttribute('data-modal-open');
+      if (id) openModal(id);
+      return;
+    }
+    if (closeBtn) {
+      const modal = closeBtn.closest('.modal');
+      closeModal(modal);
+      return;
+    }
+
+      if (e.target.matches('.modal__overlay')) {
+        const modal = e.target.closest('.modal');
+        closeModal(modal);
+        return;
+      }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal.active')
+        .forEach((modal) => closeModal(modal));
+    }
+  });
 });
 
-function initModal() {
-	let lastModalOpener = null;
+document.addEventListener('input', function(e) {
+  if (!e.target.matches('.auto-textarea')) return;
+  e.target.style.height = 'auto';
+  e.target.style.height = e.target.scrollHeight + 'px';
+});
 
-	function closeAllModals() {
-		document.querySelectorAll('.modal.open').forEach(modal => {
-			modal.classList.remove('open');
-		});
-	}
-	document.addEventListener('click', function (e) {
-		let modalOpen = e.target.closest('[data-modal-open]');
-		if (modalOpen) {
-			e.preventDefault();
-			const id = modalOpen.getAttribute('data-modal-open');
-			const modal = document.getElementById(id);
-			if (modal) modal.classList.add('open');
-			lastModalOpener = modalOpen;
-			return;
-		}
-		if (e.target.hasAttribute('data-modal-close')) {
-			e.preventDefault();
-			const modal = e.target.closest('.modal');
-			if (modal) modal.classList.remove('open');
-		}
-	});
 
-	window.closeAllModals = closeAllModals;
-}
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.auto-textarea').forEach(el => {
+    el.style.height = el.scrollHeight + 'px';
+  });
+})
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.tabs-wrapper').forEach(wrapper => {
+    const buttons = wrapper.querySelectorAll('.tab-btn');
+    const contents = wrapper.querySelectorAll('.tab-content');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.dataset.tab;
+        buttons.forEach(b => b.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+
+        btn.classList.add('active');
+        wrapper.querySelector('#' + tabId).classList.add('active');
+      });
+    });
+  });
+});

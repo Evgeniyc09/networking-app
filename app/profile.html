@@ -1,0 +1,104 @@
+<!--#set var="title" value="OptimizedHTML 5" -->
+<!--#include virtual="./parts/header.html" -->
+<div class="page__bg">
+
+  <div class="page">
+
+    <nav class="profile-navigation__list">
+      <a href="" class="profile-navigation__item">
+        <img src="./images/dist/user-ico.svg" alt="">
+        Личные данные
+      </a>
+
+      <a href="" class="profile-navigation__item">
+        <img src="./images/dist/about-ico.svg" alt="">
+        О себе
+      </a>
+      <a href="" class="profile-navigation__item">
+        <img src="./images/dist/about-ico.svg" alt="">
+        Контакты
+      </a>
+      <a href="" class="profile-navigation__item">
+        <img src="./images/dist/role-ico.svg" alt="">
+        Роль
+      </a>
+    </nav>
+    <!--#include virtual="./parts/nav.html" -->
+  </div>
+
+</div>
+
+<!--#include virtual="./parts/footer.html" -->
+
+<script>
+  (function () {
+    const btn = document.querySelector('.page-head-btn-image-upload');
+    const input = document.getElementById('fileInput');
+    const percent = document.getElementById('percent');
+    const avatar = document.querySelector('.profile-avatar img');
+
+    const MAX_SIZE = 5 * 1024 * 1024;
+    const ALLOWED = ['image/jpeg', 'image/png'];
+    let xhr = null;
+
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      input.click();
+    });
+
+    input.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      input.value = '';
+
+      if (!file) return;
+      if (!ALLOWED.includes(file.type)) return;
+      if (file.size > MAX_SIZE) return;
+
+      uploadFile(file);
+    });
+
+    function uploadFile(file) {
+      if (xhr) try { xhr.abort(); } catch (_) { }
+
+      xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://api.imgbb.com/1/upload?key=8f66eccef4fc4672d813e747b661132c', true);
+
+      const form = new FormData();
+      form.append('image', file);
+
+      xhr.onloadstart = () => {
+        percent.style.display = 'flex';
+        percent.textContent = '';
+      };
+
+      xhr.upload.onprogress = (ev) => {
+        if (!ev.lengthComputable) return;
+        const pct = Math.round((ev.loaded / ev.total) * 100);
+
+        percent.textContent = pct + '%';
+      };
+
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState !== 4) return;
+
+        if (xhr.status >= 200 && xhr.status < 300) {
+          const data = JSON.parse(xhr.responseText || '{}');
+          if (data?.data?.display_url) avatar.src = data.data.display_url;
+        }
+
+        finish();
+      };
+
+      xhr.onerror = finish;
+      xhr.onabort = finish;
+
+      xhr.send(form);
+    }
+
+    function finish() {
+      percent.style.display = 'none';
+      percent.textContent = '';
+      xhr = null;
+    }
+  })();
+</script>
