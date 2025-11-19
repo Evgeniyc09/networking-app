@@ -210,3 +210,21 @@
 .social-input__field::placeholder {
   color: #c7ccd2;
 }
+
+.form__field-wrapper--search {
+  position: relative;
+  .field {
+    text-indent: 45px;
+  }
+
+  .form__field-search-btn {
+    position: absolute;
+    width: 45px;
+    height: 100%;
+    top: 0;
+    left: 0;
+    outline: none;
+    border: none;
+    background: url("../images/dist/search-ico.svg") no-repeat center;
+  }
+}
