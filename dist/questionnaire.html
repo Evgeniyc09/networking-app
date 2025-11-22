@@ -15,6 +15,7 @@
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">
   <link rel="stylesheet" href="./css/app.min.css" />
 </head>
 
@@ -25,20 +26,22 @@
 
   <div class="page">
     <header id="header" class="header" style=" margin-top: var(--tg-content-safe-area-inset-top);">
-    <a href="" class="header__info">
+      <a href="" class="header__info">
         <div class="header__avatar">
-            <img class="header__ava" src="../images/dist/avatar-placeholder.png" alt="">
+          <img class="header__ava" src="../images/dist/avatar-placeholder.png" alt="">
         </div>
         <div class="header__personal">
-            <p class="header__name">Диана Жекенбек</p>
-            <p class="header__status">Ищу работу</p>
+          <p class="header__name">Диана Жекенбек</p>
+          <p class="header__status">Ищу работу</p>
         </div>
-    </a>
+      </a>
 
-    <div class="header__logo">
-        <img src="../images/dist/logo.svg" alt="">
-    </div>
-</header>
+      <div class="header__action">
+        <a href="" class="header__action-edit">
+          <img src="./images/dist/edit-ico.svg" alt="">
+          Редактировать</a>
+      </div>
+    </header>
 
     <div class="v-main__service-list">
       <a href="" class="v-main__service-item v-main__service-item--simple" data-modal-open="modal-1">
@@ -98,7 +101,49 @@
       <a href="" class="profile-btn profile-btn--instagram">
         <img src="./images/dist/instagram.svg" alt="">
       </a>
+      <a href="" class="profile-btn profile-btn--youtube">
+        <img src="./images/dist/play-ico.svg" alt="">
+      </a>
+      <a href="" class="profile-btn profile-btn--tiktok">
+        <img src="./images/dist/tiktok-ico.svg" alt="">
+      </a>
+      <a href="" class="profile-btn profile-btn--vk">
+        <img src="./images/dist/vk-ico.svg" alt="">
+      </a>
+    </div>
 
+    <div class="profile__card">
+      <div class="profile__card-title"><img src="./images/dist/stats-ico.svg" alt="">Ниши</div>
+
+      <div class="profile__card-list">
+        <div class="profile__card-tag">Рекрутинг</div>
+        <div class="profile__card-tag">Построеник команд</div>
+        <div class="profile__card-tag">Онлайн-образование</div>
+        <div class="profile__card-tag">Онлайн-образование</div>
+        <div class="profile__card-tag">Онлайн-образование</div>
+      </div>
+    </div>
+
+    <div class="profile__card">
+      <div class="profile__card-title"><img src="./images/dist/search-ico.svg" alt="">Ищу</div>
+
+      <div class="profile__card-list">
+        <div class="profile__card-tag">ТОПов, которые хотят прокачаться в менеджменте</div>
+        <div class="profile__card-tag">ТОПов, которые хотят прокачаться в менеджменте</div>
+        <div class="profile__card-tag">ТОПов, которые хотят прокачаться в менеджменте</div>
+        <div class="profile__card-tag">Построеник команд</div>
+        <div class="profile__card-tag">Онлайн-образование</div>
+        <div class="profile__card-tag">Онлайн-образование</div>
+        <div class="profile__card-tag">Онлайн-образование</div>
+      </div>
+    </div>
+
+    <div class="profile__card">
+      <div class="profile__card-title"><img src="./images/dist/case-ico.svg" alt="">Кейсы и достижения</div>
+
+      <div class="profile__card-text">
+        Онлайн-образование выростило более 20 топов и построило сильный HR
+      </div>
     </div>
 
     <div class="v-navigation-container">
@@ -159,6 +204,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
 <script src="./js/app.min.js"></script>
 
 

@@ -16,3 +16,41 @@
     border-radius: 8px;
   }
 }
+
+.profile {
+  &__card {
+    border-radius: 12px;
+    padding: 12px;
+    margin: 12px 0;
+    background-color: var(--gray-dark);
+    border: 1px solid var(--gray-stroke);
+  }
+
+  &__card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__card-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 12px 0 0;
+  }
+
+  &__card-tag {
+    background-color: var(--gray);
+    padding: 4px 8px;
+    border-radius: 100px;
+    font-size: 12px;
+    color: rgba(#fff, 0.54);
+  }
+
+  &__card-text {
+    margin: 12px 0 0;
+    font-size: 12px;
+    color: rgba(#fff, 0.54);
+  }
+}

@@ -341,7 +341,7 @@
   }
 
   &--wcp {
-    background-color: #25d366;
+    background-color: #21c063;
   }
 
   &--instagram {
@@ -351,6 +351,18 @@
       #ee2a7b 68.14%,
       #6228d7 165.07%
     );
+  }
+
+  &--vk {
+    background-color: #2787f5;
+  }
+
+  &--tiktok {
+    background-color: #000;
+  }
+
+  &--youtube {
+    background-color: #ff0033;
   }
 }
 
@@ -739,4 +751,9 @@
     gap: 12px;
     margin: 20px 0;
   }
+}
+
+.header__action-edit {
+  color: white;
+  text-decoration: none;
 }

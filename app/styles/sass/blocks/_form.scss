@@ -228,3 +228,38 @@
     background: url("../images/dist/search-ico.svg") no-repeat center;
   }
 }
+
+.ts-control {
+  background-color: var(--gray-dark);
+  border: 1px solid var(--gray-stroke);
+}
+
+.ts-wrapper.multi .ts-control > div {
+  background-color: var(--gray);
+  border-radius: 100px;
+  padding: 4px 8px;
+  color: hsla(0, 0%, 100%, 0.54);
+}
+
+.ts-control input {
+  color: white;
+}
+
+.ts-dropdown {
+  color: white;
+  background-color: var(--gray-dark);
+  border: 1px solid var(--gray-stroke);
+}
+
+.ts-dropdown .active {
+  background-color: #1578d7;
+  color: white;
+}
+
+.ts-dropdown .option {
+  color: white;
+}
+
+.ts-dropdown .active.create {
+  color: white;
+}

@@ -107,3 +107,66 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+  function initMultiSelects() {
+    const widgets = document.querySelectorAll('.ms');
+    if (!widgets.length) return;
+
+    function closeAll() {
+      widgets.forEach(w => w.classList.remove('is-open'));
+    }
+
+    widgets.forEach(widget => {
+      const trigger = widget.querySelector('.ms__trigger');
+      const menu = widget.querySelector('.ms__menu');
+      const hidden = widget.querySelector('input[type="hidden"]');
+      const checkboxes = widget.querySelectorAll('input[type="checkbox"]');
+      const placeholder = widget.dataset.placeholder || 'Выберите';
+
+      if (!trigger || !menu || !hidden) return;
+
+      trigger.textContent = placeholder;
+
+      function updateState() {
+        const selected = [];
+        const labels = [];
+
+        checkboxes.forEach(cb => {
+          if (cb.checked) {
+            selected.push(cb.value);
+            const labelEl = cb.closest('.ms__option')?.querySelector('span');
+            labels.push(labelEl ? labelEl.textContent.trim() : cb.value);
+          }
+        });
+
+        hidden.value = selected.join(',');
+
+        if (!selected.length) {
+          trigger.textContent = placeholder;
+        } else if (selected.length === 1) {
+          trigger.textContent = labels[0];
+        } else {
+          trigger.textContent = `Выбрано: ${selected.length}`;
+        }
+      }
+
+      trigger.addEventListener('click', e => {
+        e.stopPropagation();
+        const willOpen = !widget.classList.contains('is-open');
+        closeAll();
+        if (willOpen) widget.classList.add('is-open');
+      });
+
+      checkboxes.forEach(cb => {
+        cb.addEventListener('change', updateState);
+      });
+
+      document.addEventListener('click', () => {
+        widget.classList.remove('is-open');
+      });
+
+      updateState();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initMultiSelects);

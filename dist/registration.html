@@ -15,6 +15,7 @@
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">
   <link rel="stylesheet" href="./css/app.min.css" />
 </head>
 
@@ -75,6 +76,30 @@
       </div>
 
       <div class="form__field-wrapper">
+        <label for="male" class="label">Ниша</label>
+        <div class="ms" data-placeholder="Выберите варианты">
+          <button type="button" class="ms__trigger">Выберите варианты</button>
+
+          <div class="ms__menu">
+            <label class="ms__option">
+              <input type="checkbox" value="recruiting">
+              <span>Рекрутинг</span>
+            </label>
+            <label class="ms__option">
+              <input type="checkbox" value="team">
+              <span>Построение команды</span>
+            </label>
+            <label class="ms__option">
+              <input type="checkbox" value="edu">
+              <span>Онлайн-образование</span>
+            </label>
+          </div>
+
+          <input type="hidden" name="subjects" value="">
+        </div>
+      </div>
+
+      <div class="form__field-wrapper">
         <label for="about" class="label">О себе</label>
 
         <textarea rows="4" name="about" id="about" class="textarea auto-textarea"></textarea>
@@ -106,6 +131,10 @@
           <input type="checkbox" name="skills" value="vue">
           <span>Навык 1</span>
         </label>
+      </div>
+
+      <div class="form__field-wrapper">
+        <select id="select-tags" multiple placeholder="Какая у вас роль..."></select>
       </div>
 
       <div class="form__field-wrapper">
@@ -186,6 +215,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
 <script src="./js/app.min.js"></script>
 
 
@@ -282,4 +312,53 @@
       xhr = null;
     }
   })();
+</script>
+
+<script>
+  new TomSelect('#select-tags', {
+    valueField: 'id',
+    labelField: 'title',
+    searchField: 'title',
+    options: [
+      { id: 1, title: 'Директор' },
+      { id: 2, title: 'Менеджер' },
+      { id: 3, title: 'Разработчик' },
+    ],
+
+    create(input) {
+      return {
+        id: 'new-' + input,
+        title: input,
+      };
+    },
+
+    render: {
+      option(data, escape) {
+        return `
+        <div>
+          <span class="title">${escape(data.title)}</span>
+        </div>
+      `;
+      },
+
+      item(data, escape) {
+        return `
+        <div title="${escape(data.title)}">
+          ${escape(data.title)}
+        </div>
+      `;
+      },
+
+      no_results(data, escape) {
+        return `<div class="no-results">Ничего не найдено</div>`;
+      },
+
+      option_create(data, escape) {
+        return `<div class="create">
+        Добавить: <strong>${escape(data.input)}</strong>
+      </div>`;
+      }
+    }
+  });
+
 </script>
