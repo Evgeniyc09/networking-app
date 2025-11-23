@@ -762,11 +762,14 @@
 
 .v-person {
   &__item {
+    padding: 12px;
+    text-align: center;
     background-color: var(--gray-dark);
     border: 1px solid var(--gray-stroke);
     border-radius: 12px;
-    padding: 12px;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   &__cover {
@@ -801,4 +804,15 @@
 .personSwiper {
   padding-bottom: 30px;
   margin: 24px 0;
+
+  .swiper-wrapper {
+  }
+
+  .swiper-slide {
+    display: flex !important;
+    height: auto !important;
+  }
+
+  .swiper-slide {
+  }
 }
