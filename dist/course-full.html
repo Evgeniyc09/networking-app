@@ -140,7 +140,7 @@
 <script>
     var swiper = new Swiper(".advertSwiper", {
         pagination: {
-            el: ".swiper-pagination",
+            el: ".swiper-advert-pagination",
         },
     });
 
@@ -153,6 +153,14 @@
         },
         mousewheel: true,
         spaceBetween: 12,
+    });
+
+    var swiper = new Swiper(".personSwiper", {
+        slidesPerView: 3,
+        spaceBetween: 12,
+        pagination: {
+            el: ".swiper-person-pagination",
+        },
     });
 </script>
 </body>
