@@ -200,7 +200,7 @@
             </div>
           </div>
         </div>
-        <div class="swiper-pagination swiper-person-pagination"></div>
+        <div class="swiper-scrollbar"></div>
       </div>
     </div>
 
@@ -297,11 +297,14 @@
     });
 
     var swiper = new Swiper(".personSwiper", {
+        direction: "horizontal",
         slidesPerView: 3,
-        spaceBetween: 12,
-        pagination: {
-            el: ".swiper-person-pagination",
+        freeMode: true,
+        scrollbar: {
+            el: ".swiper-scrollbar",
         },
+        mousewheel: true,
+        spaceBetween: 12,
     });
 </script>
 </body>
