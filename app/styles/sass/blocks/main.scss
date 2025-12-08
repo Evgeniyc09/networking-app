@@ -810,14 +810,13 @@
     opacity: 0.2;
   }
 
-  .swiper-wrapper {
-  }
-
   .swiper-slide {
     display: flex !important;
+    width: 116px !important;
     height: auto !important;
   }
 
-  .swiper-slide {
+  .v-person__item {
+    width: 100%;
   }
 }
