@@ -71,6 +71,16 @@
       </a>
     </div>
 
+    <div class="v-main__service-list">
+      <a href="" class="v-main__service-item" data-modal-open="modal-1"
+        style="height: 68px; background: url('./images/dist/feature-1.png')no-repeat center/cover;">
+      </a>
+
+      <a href="" class="v-main__service-item" data-modal-open="modal-1"
+        style="height: 68px; background: url('./images/dist/feature-2.png')no-repeat center/cover;">
+      </a>
+    </div>
+
     <div class="advert-slider">
       <div class="swiper advertSwiper">
         <div class="swiper-wrapper">
@@ -81,7 +91,7 @@
             <img src="./images/dist/advent-example.png" alt="">
           </div>
           <div class="swiper-slide">
-            <img src="./images/dist/advent-example.png" alt="">
+            <img src="./images/dist/slider-bg-test.png" alt="">
           </div>
         </div>
         <div class="swiper-pagination swiper-advert-pagination"></div>
@@ -93,6 +103,26 @@
       <p class="v-main__section-desc">
         Собираем проверенных подрядчиков по рынку, <br> чтобы вам не пришлоось искать их по чатам
       </p>
+    </div>
+
+    <div class="v-main__selection">
+      <div class="swiper selectionSwiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <a href="" class="v-main__selection-item v-main__selection-item--bg" style="background: url('./images/dist/slide-1.png'); border: none; width: 372px;
+  min-height: 143px;">
+            </a>
+
+          </div>
+
+          <div class="swiper-slide">
+            <a href="" class="v-main__selection-item v-main__selection-item--bg" style="background: url('./images/dist/slide-2.png'); border: none; width: 372px;
+                                      min-height: 143px;">
+            </a>
+          </div>
+        </div>
+        <div class="swiper-scrollbar"></div>
+      </div>
     </div>
 
     <div class="v-main__selection">
@@ -196,7 +226,7 @@
                 <img src="./images/dist/no-photo-52x52.png" alt="">
               </div>
               <div class="v-person__name">Арман Юсупов</div>
-              <div class="v-person__desc">Блогер, Визионер</div>
+              <div class="v-person__desc">Блогер, Визионер Блогер, Визионер Блогер, Визионер Блогер, Визионер</div>
             </div>
           </div>
         </div>
@@ -280,6 +310,7 @@
 
 <script>
     var swiper = new Swiper(".advertSwiper", {
+        autoHeight: true,
         pagination: {
             el: ".swiper-advert-pagination",
         },

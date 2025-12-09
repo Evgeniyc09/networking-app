@@ -130,6 +130,15 @@
   }
 }
 
+.v-main__selection-item--bg {
+  width: 372px;
+  min-height: 143px;
+  &:before {
+    content: "";
+    display: none;
+  }
+}
+
 .v-main__calendar {
   position: relative;
   display: block;
@@ -250,6 +259,12 @@
 
 .advert-slider {
   margin: 24px 0;
+
+  .swiper-slide {
+    img {
+      width: 100%;
+    }
+  }
 }
 
 .advert-slider,
